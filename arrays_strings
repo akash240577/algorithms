@@ -1,0 +1,129 @@
+import numpy as np
+
+
+# find elements matching in two arrays
+def array_match():
+    array_a = [3, 4, 8, 10, 20, 25, 26]
+    array_b = [3, 4, 8, 10, 20, 25, 26]
+
+    idx_a = 0
+    idx_b = 0
+
+    number_of_steps = 0;
+    while idx_a < len(array_a):
+        number_of_steps = number_of_steps + 1;
+        while idx_b < len(array_b):
+            number_of_steps = number_of_steps + 1;
+            if array_a[idx_a] < array_b[idx_b]:  # if array_a element is less than array_b, no need to search in array_b further
+                idx_a = idx_a + 1
+                break
+            elif array_a[idx_a] > array_b[idx_b]:  # if array_a element is greater than array b, search in array_b further
+                idx_b = idx_b + 1
+            else:
+                print(array_a[idx_a])  # match found
+                idx_a = idx_a + 1
+                idx_b = idx_b + 1
+
+    print("number of steps {}".format(number_of_steps))
+
+
+#  array_match()
+
+# determine if given string has all unique characters, using extra set
+def has_unique_chars_using_extra_memory(given_str):
+    extra_set = set()  # using additional data structure
+    for char in given_str:
+        if (char in extra_set):
+            return False
+        else:
+            extra_set.add(char)
+    return True
+
+
+# print(has_unique_chars_using_extra_memory('abcdef'))
+
+
+# determine if given string has all unique characters, using extra bit vector assuming string consisting of a to z only
+def has_unique_chars_bit_vector(given_str):
+    vector = 0  # bit vector to hold bits for each char in given string, initially nothing in there
+    ascii_a = 97
+
+    for char in given_str:
+        char_offset = ord(char) - ascii_a
+        print("vector {}".format(bin(vector)))
+
+        if 1 & vector >> char_offset:  # check if char is present in the vector
+            return False
+        else:
+            vector = vector | (1 << char_offset)  # add char to the proper place in the vecor
+    return True
+
+
+# print(has_unique_chars_bit_vector('abcdezb'))
+
+
+# determine is first string is permutation of second
+# One way is to sort both and then and then compare, will take O(nlogn+nlogn+n) = O(nlogn)
+
+# def is_permutation(first, second):
+#
+#
+# print(is_permutation('abc123', '12ab31'))
+
+# Palindrome Permutation
+
+# def is_palindrome_permutation(given_str):
+#
+#
+# print(is_palindrome_permutation('abcba'))
+
+
+# Matrix Transpose, 90 degree rotation clockwise, move each element
+# TODO: not working fine.
+
+def matrix_transpose_clockwise(m, size):
+    col = 0  # column index
+    current_row = 0  # main loop will iterate on first row only
+
+    while col < size:
+        current_col = col
+        current_temp = m[current_row][current_col]
+        while True:
+            target_row = current_col  # target row will be current column
+            target_column = (size - 1) - current_row  # target column
+
+            next_temp = m[target_row][target_column]  # keep target in temp
+            m[target_row][target_column] = current_temp  # update target row/col data
+
+            current_row = target_row
+            current_col = target_column
+            current_temp = next_temp
+
+            if current_row == 0:
+                break
+
+        col = col + 1  # move on to next column in first row only
+    return m
+
+
+matrix_size = 4
+
+# input_matrix = [[random.randint(1, 20) for i in range(matrix_size)] for j in range(matrix_size)]
+input_matrix = [[11, 18, 10, 7],
+                [9, 15, 3, 8],
+                [12, 17, 2, 6],
+                [1, 4, 5, 14]]
+
+print("Input matrix")
+np_array = np.array(input_matrix)
+print(np_array)  # print input matrix
+
+output_matrix = matrix_transpose_clockwise(input_matrix, matrix_size)
+print("output matrix")
+print(np.array(output_matrix))
+
+print("numpy transposed input matrix")
+print(np.rot90(np_array, -1))  # print input matrix transposed using numpy
+
+
+
